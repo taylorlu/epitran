@@ -98,6 +98,32 @@ class Epihan(object):
     def strict_trans(self, text, normpunc=False, ligatures=False):
         return self.transliterate(text, normpunc, ligatures)
 
+    def transliterate_pinyin(self, pinyin, normpunc=False, ligatures=False):
+        """Transliterates/transcribes a pinyin into IPA
+
+        Args:
+            pinyin (str or list): pinyin to transcribe; Unicode string
+            normpunc (bool): normalize punctuation
+            ligatures (bool): use precomposed ligatures instead of standard IPA
+
+        Returns:
+            str: Unicode IPA string
+        """
+        if(isinstance(pinyin, str)):
+            pinyin = pinyin.split(' ')
+
+        ipa_tokens = []
+        for token in pinyin:
+            token = u''.join(token).lower()
+            ipa = self.rules.apply(token)
+            ipa_tokens.append(ipa.replace(u',', u''))
+            ipa_tokens = map(ligaturize, ipa_tokens)\
+                if ligatures else ipa_tokens
+        return u' '.join(ipa_tokens)
+
+    def strict_trans(self, text, normpunc=False, ligatures=False):
+        return self.transliterate(text, normpunc, ligatures)
+
 
 class EpihanTraditional(Epihan):
     def __init__(self, ligatures=False, cedict_file=None, rules_file='pinyin-to-ipa.txt'):

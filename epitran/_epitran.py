@@ -25,7 +25,7 @@ class Epitran(object):
                'cmn-Hant': EpihanTraditional}
 
     def __init__(self, code, preproc=True, postproc=True, ligatures=False, cedict_file=None,
-                 rev=False, rev_preproc=True, rev_postproc=True, tones=False):
+                 rev=False, rev_preproc=True, rev_postproc=True, tones=True):
         """Construct Epitran transliteration/transcription object
 
         Args:
@@ -60,6 +60,19 @@ class Epitran(object):
             unicode: IPA string
         """
         return self.epi.transliterate(word, normpunc, ligatures)
+
+    def transliterate_pinyin(self, word, normpunc=False, ligatures=False):
+        """Transliterates/transcribes a word into IPA
+
+        Args:
+            word (str): word to transcribe; unicode string
+            normpunc (bool): normalize punctuation
+            ligatures (bool): use precomposed ligatures instead of standard IPA
+
+        Returns:
+            unicode: IPA string
+        """
+        return self.epi.transliterate_pinyin(word, normpunc, ligatures)
 
     def reverse_transliterate(self, ipa):
         """Reconstructs word from IPA. Does the reverse of transliterate()

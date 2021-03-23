@@ -8,6 +8,7 @@ import panphon.featuretable
 from epitran.puncnorm import PuncNorm
 from epitran.xsampa import XSampa
 from epitran.stripdiacritics import StripDiacritics
+import pkg_resources
 
 
 class Backoff(object):
@@ -22,6 +23,8 @@ class Backoff(object):
             cedict_file (str): path to the CC-CEdict dictionary file
             (necessary only when cmn-Hans or cmn-Hant are used)
         """
+        if(cedict_file is None):
+            cedict_file = pkg_resources.resource_filename(__name__, 'data/cedict_1_0_ts_utf-8_mdbg.txt')
         self.langs = [_epitran.Epitran(c, cedict_file=cedict_file)
                       for c in lang_script_codes]
         self.num_re = re.compile(r'\p{Number}+')
@@ -60,6 +63,17 @@ class Backoff(object):
                 else:
                     tr_list.append(token[0])
                     token = token[1:]
+        return ''.join(tr_list)
+
+    def transliterate_pinyin(self, token):
+        """Return IPA transliteration given by first acceptable mode.
+        Args:
+            token (unicode): orthographic text
+        Returns:
+            unicode: transliteration as Unicode IPA string
+        """
+        tr_list = []
+        tr_list.append(self.langs[0].transliterate_pinyin(token))
         return ''.join(tr_list)
 
     def trans_list(self, token):
