@@ -1,3 +1,35 @@
+# Addition
+#### compile flite for english g2p
+```bash
+$ git clone git@github.com:festvox/flite.git
+$ cd flite/
+$ ./configure && make
+$ sudo make install
+$ cd testsuite
+$ make lex_lookup
+$ sudo cp lex_lookup /usr/local/bin
+```
+#### install epitran from code
+```python
+>>> python setup.py install
+```
+#### run example
+```python
+>>> from epitran.backoff import Backoff
+>>> backoff = Backoff(['eng-Latn', 'cmn-Hans'])
+>>> print(backoff.transliterate('中华 人民 共和国 university'))
+ʈ͡ʂoŋ˥xua˧˥ ɻen˧˥min˧˥ koŋ˥˩xe˧˥kuo˧˥ junəvɹ̩səti
+```
+
+```python
+>>> from epitran.backoff import Backoff
+>>> backoff = Backoff(['cmn-Hans']) # pinyin should use cmn-Hans only
+>>> print(backoff.transliterate_pinyin('lv4 shi4 yang2 chun1 yan1 jing3'))
+lv˥˩ ʂɻ̩˥˩ jaŋ˧˥ ʈ͡ʂʰun˥ jan˥ t͡ɕiŋ˨˩
+>>> print(backoff.transliterate('绿 是 阳 春 烟 景'))
+ly˥˩ ʂɻ̩˥˩ jaŋ˧˥ ʈ͡ʂʰun˥ jan˥ t͡ɕiŋ˨˩
+```
+
 # Epitran
 
 A library and tool for transliterating orthographic text as IPA (International Phonetic Alphabet).
